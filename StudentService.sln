@@ -5,9 +5,14 @@ VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentServiceAPI", "API\StudentServiceAPI.csproj", "{8D7D2F93-7C21-4E53-B76D-DEB782B483FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentServiceStorage", "StudentServiceStorage\StudentServiceStorage.csproj", "{DE194393-5A03-460C-9C25-3976AB102971}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentServiceStorage", "StudentServiceStorage\StudentServiceStorage.csproj", "{DE194393-5A03-460C-9C25-3976AB102971}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentServiceBL", "StudentServiceBL\StudentServiceBL.csproj", "{2404F3B1-7D25-4587-905A-4CFB84915B24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentServiceBL", "StudentServiceBL\StudentServiceBL.csproj", "{2404F3B1-7D25-4587-905A-4CFB84915B24}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F8C31F2C-6C05-4671-9D65-70B0F5CDC701}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

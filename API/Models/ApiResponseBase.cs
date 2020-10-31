@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System;
 using System.Net;
 
 namespace StudentServiceAPI.Models
@@ -23,7 +24,7 @@ namespace StudentServiceAPI.Models
         internal void SetNotFoundResponse(HttpResponse response,string message="")
         {
             response.StatusCode = (int)HttpStatusCode.NotFound;
-            Code = ApiResponseCodeEnum.BadRequest;
+            Code = ApiResponseCodeEnum.NotFound;
             Message = message;
         }
 
@@ -31,6 +32,13 @@ namespace StudentServiceAPI.Models
         {
             response.StatusCode = (int)HttpStatusCode.OK;
             Code = ApiResponseCodeEnum.Success;
+            Message = message;
+        }
+
+        internal void SetUnauthorizedResponse(HttpResponse response, string message)
+        {
+            response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            Code = ApiResponseCodeEnum.Unauthorized;
             Message = message;
         }
 

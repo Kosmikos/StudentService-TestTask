@@ -1,29 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Xml;
 using log4net;
 using log4net.Config;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using StudentServiceAPI.Auth;
+using StudentServiceAPI.Models;
 using StudentServiceAPI.Utils;
 using StudentServiceBL;
 using StudentServiceBL.Logging;
 using StudentServiceBL.Storage;
 using StudentServiceStorage;
+using System;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Xml;
 
 namespace StudentService
 {
@@ -36,7 +34,6 @@ namespace StudentService
 
         public IConfiguration Configuration { get; }
 
-        [Obsolete]
         public void ConfigureServices(IServiceCollection services)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -57,14 +54,20 @@ namespace StudentService
                 var connectionString = Configuration.GetConnectionString("Default");
                 return new PostgresStorage(connectionString);
             });
+            services.AddScoped<IAuthTokenChecker>(provider =>
+            {
+                var tokenCheckOption = new AuthTokenCheckerOptions();
+                Configuration.GetSection("TokenCheck").Bind(tokenCheckOption);
+                var loggerFactory = provider.GetRequiredService<ILogFactory>();
+                //return new AuthTokenChecker(tokenCheckOption, loggerFactory); //correct token //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoicXdlcnR5IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoidXNlciIsIm5iZiI6MTQ4MTYzOTMxMSwiZXhwIjoxNDgxNjM5MzcxLCJpc3MiOiJNeUF1dGhTZXJ2ZXIiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjUxODg0LyJ9.dQJF6pALUZW3wGBANy_tCwk5_NR0TVBwgnxRbblp5Ho
+                return new AuthTokenCheckerAlwaysTrue();
+            });
             services.AddTransient<ILogFactory, LogSystem>();
 
-                        services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Student service API", Version = "v1" });
-
-                //c.DescribeAllEnumsAsStrings();
-
+                
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -94,10 +97,28 @@ namespace StudentService
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
                 c.EnableFilter();
             });
-
+                        
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.Use(async (context, next) =>
+            {
+                Endpoint endpoint = context.GetEndpoint();
+                if (endpoint != null)                {
+                    
+                    var routePattern = (endpoint as Microsoft.AspNetCore.Routing.RouteEndpoint)?.RoutePattern?.RawText;
+                    await next();
+                }
+                else
+                {
+
+                    var res = new ApiResponseBase();
+                    res.SetNotFoundResponse(context.Response,"Function not found");
+                    context.Response.ContentType = "application/json; charset=utf-8";
+                    await context.Response.WriteAsync(JsonConvert.SerializeObject(res));
+                }
+            });
+
+            app.UseMiddleware<AuthAPIMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
