@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StudentServiceAPI</name>
+    </assembly>
+    <members>
+        <member name="T:StudentServiceAPI.Controllers.ServiceController">
+            <summary>
+            Maintanance functions
+            </summary>
+        </member>
+        <member name="M:StudentServiceAPI.Controllers.ServiceController.Check">
+            <summary>
+            Check API working
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:StudentServiceAPI.Controllers.ServiceController.ThrowException">
+            <summary>
+            Check of correct processed unhandled exception
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:StudentServiceAPI.Controllers.StudentsController">
+            <summary>
+            Function for works with students
+            </summary>
+        </member>
+        <member name="M:StudentServiceAPI.Controllers.StudentsController.GetById(System.Int32)">
+            <summary>
+            Get student by id
+            </summary>
+            <param name="studentId">Student identificator</param>
+            <returns></returns>
+        </member>
+        <member name="T:StudentServiceAPI.Models.ApiResponseBase">
+            <summary>
+            Base class for all response
+            </summary>
+        </member>
+        <member name="P:StudentServiceAPI.Models.ApiResponseBase.Code">
+            <summary>
+            Responce code
+            </summary>
+        </member>
+        <member name="P:StudentServiceAPI.Models.ApiResponseBase.Message">
+            <summary>
+            Response message
+            </summary>
+        </member>
+        <member name="T:StudentServiceAPI.Models.ApiResponseStudent">
+            <summary>
+            Result of query one student
+            </summary>
+        </member>
+        <member name="P:StudentServiceAPI.Models.ApiResponseStudent.Student">
+            <summary>
+            Student data
+            </summary>
+        </member>
+    </members>
+</doc>
