@@ -16,9 +16,9 @@ namespace StudentServiceBL
             _storage = storage;
         }
 
-        public void AddStudent(Student student)
+        public async Task<PaginatedList<Student>> GetFilteredStudentAsync(string filterText, int pageIndex, int pageSize)
         {
-            //_storage.AddStudent(student);
+            return await _storage.GetFilteredStudentAsync(filterText, pageIndex, pageSize);
         }
 
         public async Task<Student> GetStudentByIdAsync(int studentId)

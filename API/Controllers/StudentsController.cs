@@ -47,6 +47,20 @@ namespace StudentServiceAPI.Controllers
             return res;
         }
 
-      
+        [HttpGet("FilterStudents")]
+        public async Task<ApiResponseFilteredStudent> FilterStudents(string filterText, int pageIndex, int pageSize)
+        {
+            var res = new ApiResponseFilteredStudent();
+            var studentPage = await _worker.GetFilteredStudentAsync(filterText, pageIndex, pageSize);
+            res.Students = studentPage;
+            res.CountAll = studentPage.TotalCount;
+            res.CountOnPage = pageSize;
+            res.PageIndex = pageIndex;
+
+            res.SetSuccessResponse(Response);
+            return res;
+        }
+
+
     }
 }
