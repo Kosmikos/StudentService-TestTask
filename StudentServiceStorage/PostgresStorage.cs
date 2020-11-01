@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudentServiceBL.Data;
 using StudentServiceBL.Storage;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace StudentServiceStorage
@@ -19,7 +16,7 @@ namespace StudentServiceStorage
 
         public async Task<Student> GetStudentByIdAsync(int studentId)
         {
-            var studentDb = await _contextDb.students.FirstOrDefaultAsync(s => s.id == studentId);
+            var studentDb = await _contextDb.students.Include(s => s.student_groups).FirstOrDefaultAsync(s => s.id == studentId);
             return PostgresDbHelper.ToStudent(studentDb);
         }
     }
