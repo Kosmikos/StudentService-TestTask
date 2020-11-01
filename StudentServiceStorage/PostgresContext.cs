@@ -26,11 +26,11 @@ namespace StudentServiceStorage
             modelBuilder.Entity<StudentGroupDb>()
                     .HasKey(bc => new { bc.student_id, bc.group_id });
             modelBuilder.Entity<StudentGroupDb>()
-                .HasOne(bc => bc.student)
+                .HasOne(bc => bc.students)
                 .WithMany(b => b.student_groups)
                 .HasForeignKey(bc => bc.student_id);
             modelBuilder.Entity<StudentGroupDb>()
-                .HasOne(bc => bc.groupdb)
+                .HasOne(bc => bc.groups)
                 .WithMany(c => c.student_groups)
                 .HasForeignKey(bc => bc.group_id);
         }
